@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Self Camera</title>
+    </head>
+    <body>
+	{% csrf_token %}
+	<video id="v" width="0" height="0" autoplay="1" ></video>
+	<canvas id="c" width="0" height="0"></canvas>
+	<img id="newImg">
+	<input type="button" value="写真を撮る" onclick="copyFrame()" />
+	<script type="text/javascript">
+	    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
+	    window.URL = window.URL || window.webkitURL;
+	    var video = document.getElementById('v');
+	    var localStream = null;
+	    navigator.getUserMedia({video: true, audio: false}, 
+		function (stream) { // for success case
+		    console.log(stream);
+		    video.src = window.URL.createObjectURL(stream);
+		},
+		function (err) { // for error case
+		    console.log(err);
+		}
+	    );
+	    function copyFrame () {
+		var cEle = document.getElementById('c');
+		var cCtx = cEle.getContext('2d');
+		var vEle = document.getElementById('v');
+		cEle.width  = vEle.videoWidth;
+		cEle.height = vEle.videoHeight;
+		cCtx.drawImage(vEle, 0, 0);
+		var cvs = document.getElementById("c");
+		var png = cvs.toDataURL();
+		document.getElementById("newImg").src = png;
+	    };
+	</script>
+    </body>
+</html>

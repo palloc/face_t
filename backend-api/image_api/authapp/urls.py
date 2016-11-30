@@ -1,6 +1,9 @@
 # config: utf-8
-from rest_framework import routers
-from .views import *
+from django.conf.urls import url, include
+from django.views.generic.base import *
+from authapp import views
 
-router = routers.DefaultRouter()
-router.register(r'faceimage', FaceImageViewSet)
+
+urlpatterns = [
+    url(r'^$', views.index, name='index'),
+]
