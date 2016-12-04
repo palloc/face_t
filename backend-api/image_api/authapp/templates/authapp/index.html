@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
     <head>
-        <title>Self Camera</title>
+	<title>Self Camera</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     </head>
     <body>
 	{% csrf_token %}
@@ -9,31 +11,46 @@
 	<canvas id="c" width="0" height="0"></canvas>
 	<img id="newImg">
 	<input type="button" value="写真を撮る" onclick="copyFrame()" />
+
+	<form action="{% url 'face:face' %}" method="post">
+	    {% csrf_token %}
+	    <button type="submit">投稿</button>
+	</form>
+	
 	<script type="text/javascript">
-	    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
-	    window.URL = window.URL || window.webkitURL;
-	    var video = document.getElementById('v');
-	    var localStream = null;
-	    navigator.getUserMedia({video: true, audio: false}, 
-		function (stream) { // for success case
-		    console.log(stream);
-		    video.src = window.URL.createObjectURL(stream);
-		},
-		function (err) { // for error case
-		    console.log(err);
-		}
-	    );
-	    function copyFrame () {
-		var cEle = document.getElementById('c');
-		var cCtx = cEle.getContext('2d');
-		var vEle = document.getElementById('v');
-		cEle.width  = vEle.videoWidth;
-		cEle.height = vEle.videoHeight;
-		cCtx.drawImage(vEle, 0, 0);
-		var cvs = document.getElementById("c");
-		var png = cvs.toDataURL();
-		document.getElementById("newImg").src = png;
-	    };
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia;
+	window.URL = window.URL || window.webkitURL;
+	var video = document.getElementById('v');
+	var localStream = null;
+	var png = null;
+	navigator.getUserMedia({video: true, audio: false}, 
+	    function (stream) { // for success case
+		console.log(stream);
+		video.src = window.URL.createObjectURL(stream);
+	    },
+	    function (err) { // for error case
+		console.log(err);
+	    }
+	);
+	function copyFrame () {
+	    var cEle = document.getElementById('c');
+	    var cCtx = cEle.getContext('2d');
+	    var vEle = document.getElementById('v');
+	    cEle.width  = vEle.videoWidth;
+	    cEle.height = vEle.videoHeight;
+	    cCtx.drawImage(vEle, 0, 0);
+	    var cvs = document.getElementById("c");
+	    png = cvs.toDataURL().replace("data:image/png;base64,", "");
+	};
+        $('#Send').click(function() {
+	    $.ajax({
+		type: "POST",
+		url: "localhost:8000/face",
+		data: {"image": png},
+            });
+            return false;
+        });
 	</script>
+	<input id="Send" type="submit" value="Send" />
     </body>
 </html>
