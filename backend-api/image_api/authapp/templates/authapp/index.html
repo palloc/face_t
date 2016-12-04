@@ -12,8 +12,9 @@
 	<img id="newImg">
 	<input type="button" value="写真を撮る" onclick="copyFrame()" />
 
-	<form action="{% url 'face:face' %}" method="post">
+	<form action="{% url 'auth:auth' %}" method="post" name="fm">
 	    {% csrf_token %}
+	    <input type="text" id="face" value="face" name="face">
 	    <button type="submit">投稿</button>
 	</form>
 	
@@ -41,6 +42,7 @@
 	    cCtx.drawImage(vEle, 0, 0);
 	    var cvs = document.getElementById("c");
 	    png = cvs.toDataURL().replace("data:image/png;base64,", "");
+	    document.fm.face.value = png;
 	};
         $('#Send').click(function() {
 	    $.ajax({
