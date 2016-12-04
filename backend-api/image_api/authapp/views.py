@@ -16,14 +16,11 @@ def index(request):
     return render(request, 'authapp/index.html')
 
 @require_POST
-@csrf_exempt
 def face(request):
+    if request.method == 'POST':
+        img_data = request.POST["face"].decode("base64")
 
-    upload_file = request.FILES["upload_file"]
-    photo = FaceImage(name="test.png")
-    if request.method == "POST":
-        post_data = request.POST
-        post_data.update(request.FILES)
-
-    
-    return render(request, 'authapp/auth.html')
+        # Some method for face authenticate
+        bool = '0'
+   
+    return render(request, {'success': bool}, 'authapp/auth.html')
