@@ -23,4 +23,4 @@ def face(request):
         # Some method for face authenticate
         bool = '0'
    
-    return render(request, {'success': bool}, 'authapp/auth.html')
+    return render(request, 'authapp/auth.html', {'success': bool})
