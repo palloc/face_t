@@ -14,7 +14,7 @@
 
 	<form action="{% url 'auth:auth' %}" method="post" name="fm">
 	    {% csrf_token %}
-	    <input type="text" id="face" value="face" name="face">
+	    <input type="hidden" id="face" value="face" name="face">
 	    <button type="submit">投稿</button>
 	</form>
 	
@@ -44,15 +44,6 @@
 	    png = cvs.toDataURL().replace("data:image/png;base64,", "");
 	    document.fm.face.value = png;
 	};
-        $('#Send').click(function() {
-	    $.ajax({
-		type: "POST",
-		url: "localhost:8000/face",
-		data: {"image": png},
-            });
-            return false;
-        });
 	</script>
-	<input id="Send" type="submit" value="Send" />
     </body>
 </html>

@@ -21,6 +21,6 @@ def face(request):
         img_data = request.POST["face"].decode("base64")
 
         # Some method for face authenticate
-        bool = '0'
+        bool = 'Success'
    
     return render(request, 'authapp/auth.html', {'success': bool})
