@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import django_filters
-import .hist 
+import hist 
 import cv2
 from .models import *
 
